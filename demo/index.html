@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Slwcomplete demo</title>
+<script type="text/javascript" src="jquery-1.7.min.js"></script>
+<script type="text/javascript" src="../slw.js"></script>
+<script type="text/javascript" src="../slw.complete.js"></script>
+<link rel="stylesheet" href="../style/complete.css" type="text/css" />
+</head>
+
+<body>
+	<h1>Slwcomplete Demo</h1>
+	<div style="margin: 20px">
+
+		<table class="table table-bordered editTable form-group-sm">
+			<thead>
+				<tr>
+					<th colspan="12">表单</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="firstRow">
+					<td colspan="1" class="col-md-1"></td>
+					<td colspan="1" class="col-md-1"></td>
+					<td colspan="1" class="col-md-1"></td>
+					<td colspan="1" class="col-md-1"></td>
+					<td colspan="1" class="col-md-1"></td>
+					<td colspan="1" class="col-md-1"></td>
+					<td colspan="1" class="col-md-1"></td>
+					<td colspan="1" class="col-md-1"></td>
+					<td colspan="1" class="col-md-1"></td>
+					<td colspan="1" class="col-md-1"></td>
+					<td colspan="1" class="col-md-1"></td>
+					<td colspan="1" class="col-md-1"></td>
+				</tr>
+
+				<tr>
+					<td class="tdLable" colspan="3">One-Ten数组</td>
+					<td colspan="9"><input class="form-control" id="down" type="text" value="One" /></td>
+				</tr>
+				<tr>
+					<td class="tdLable" colspan="3">One-Ten方法</td>
+					<td colspan="9"><input class="form-control" id="up" type="text" value="One" /></td>
+				</tr>
+				<tr>
+					<td class="tdLable" colspan="3">One-Ten Ajax/JSON</td>
+					<td colspan="9"><input class="form-control" id="ajaxJson" type="text" value="One" /></td>
+				</tr>
+				<tr>
+					<td class="tdLable" colspan="3">One-Ten Ajax/XML</td>
+					<td colspan="9"><input class="form-control" id="ajaxXml" type="text" value="One" /></td>
+				</tr>
+
+				<tr>
+					<td class="tdLable" colspan="3">首字母C的国家</td>
+					<td colspan="9"><input class="form-control" id="iconlist" value="Cambo" /></td>
+				</tr>
+
+				<tr>
+					<td class="tdLable" colspan="3">自定义内容</td>
+					<td colspan="9"><input class="form-control" id="custom" value="广州" /></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+
+	<script>
+		$(function() {
+			$('#down').slwComplete({
+				'data' : [ 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve' ]
+			});
+			
+			$('#up').slwComplete({
+				'data' : function() {
+					return [ 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve' ];
+				},
+				'width' : 280
+			});
+			
+			$('#ajaxJson').slwComplete({
+				'data' : "data/data.json",
+				'ajaxDataType' : 'json',
+				'ajaxParams' : {
+					'userData1' : 'a',
+					'userData2' : 'b'
+				}
+			});
+			
+			$('#ajaxXml').slwComplete({
+				'data' : "data/data.xml",
+				'ajaxDataType' : 'xml'
+			});
+			
+			var iconList = function(input) {
+				var world = [ 'Cambodia', 'Cameroon', 'Canada', 'Cape-Verde', 'Cayman-Islands', 'Central-African-Republic', 'Chad', 'Chile', 'China', 'Colombia', 'Commonwealth', 'Comoros', 'Costa-Rica', "Cote-d'Ivoire", 'Croatia', 'Cuba', 'Cyprus', 'Czech-Republic' ];
+				var result = [];
+				
+				$.each(world, function(index, name) {
+					new Image().src = 'data/image/worldFlag/' + name + '.png'; // 预加载图片
+					result.push({
+						'value' : name,
+						'label' : name,
+						'image' : 'data/image/worldFlag/' + name + '.png'
+					});
+				});
+				
+				$(input).slwComplete({
+					'data' : result,
+					'listStyle' : 'iconList',
+					'maxHeight' : 200
+				});
+			};
+			iconList('#iconlist');
+			
+			var teams = [ {
+				'label' : '江苏舜天队',
+				'value' : '江苏舜天队',
+				'id' : '1',
+				'win' : 14,
+				'tie' : 9,
+				'lose' : 3,
+				'score' : 51
+			}, {
+				'label' : '广州恒大队',
+				'value' : '广州恒大队',
+				'id' : '2',
+				'win' : 15,
+				'tie' : 6,
+				'lose' : 5,
+				'score' : 51
+			}, {
+				'label' : '广州富力队',
+				'value' : '广州富力队',
+				'id' : '3',
+				'win' : 13,
+				'tie' : 2,
+				'lose' : 11,
+				'score' : 41
+			} ];
+			$.each(teams, function(index, data) {
+				new Image().src = 'data/image/' + data['id'] + '.jpg'; // 预加载图片
+				data['image'] = 'data/image/' + data['id'] + '.jpg';
+			});
+			$('#custom').slwComplete({
+				'data' : teams,
+				'listStyle' : 'custom',
+				'maxHeight' : 480,
+				'createItemHandler' : function(index, data) {
+					var div = $("<div></div>")
+					var cell1 = $("<span style='display:table-cell;vertical-align:top;'></span>").appendTo(div);
+					var cell1_1 = $("<img style='width:32px;height:32px;'></img>").attr('src', data.image).appendTo(cell1);
+					var cell2 = $("<span style='display:table-cell;vertical-align:top;'></span>").appendTo(div);
+					var cell2_1 = $("<div></div>").append(data.label).appendTo(cell2);
+					var cell2_2 = $("<div style='vertical-align:top;'></div>").append("<span style='display:table-cell;width:40px;'>胜:" + data.win + "</span>").append("<span style='display:table-cell;width:40px;'>平:" + data.tie + "</span>").append("<span style='display:table-cell;width:40px;'>负:" + data.lose + "</span>").append("<span style='display:table-cell;width:40px;'>积:" + data.score + "</span>").appendTo(cell2);
+					return div;
+				}
+			});
+			
+		});
+	</script>
+</body>
+</html>
